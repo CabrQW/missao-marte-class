@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel ECLSS - Missão Marte</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f2f4f7;
+        }
+
+        main {
+            background: white;
+            padding: 24px;
+            border-radius: 10px;
+        }
+
+        label, input, button {
+            display: block;
+            width: 100%;
+            margin-top: 12px;
+            box-sizing: border-box;
+        }
+
+        input, button {
+            padding: 10px;
+        }
+
+        button {
+            cursor: pointer;
+            background: #176b45;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .status {
+            margin-top: 20px;
+            padding: 12px;
+            background: #e8f5e9;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Painel de Controle ECLSS</h1>
+        <p>Habitat de Marte — Monitoramento de recursos</p>
+
+        <section class="status">
+            <p>Oxigênio disponível: <strong id="nivel-oxigenio">1000</strong> unidades</p>
+            <p id="mensagem" role="status" aria-live="polite">Sistema operacional.</p>
+        </section>
+
+        <form id="form-oxigenio">
+            <label for="quantidade">Quantidade de oxigênio solicitada:</label>
+            <input
+                type="number"
+                id="quantidade"
+                name="quantidade"
+                min="1"
+                required
+            >
+            <button type="submit" id="solicitar">Solicitar oxigênio</button>
+        </form>
+    </main>
+
+    <script>
+        const form = document.getElementById("form-oxigenio");
+        const campo = document.getElementById("quantidade");
+        const nivel = document.getElementById("nivel-oxigenio");
+        const mensagem = document.getElementById("mensagem");
+
+        let estoque = 1000;
+
+        form.addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const quantidade = Number(campo.value);
+
+            if (quantidade <= 0 || !Number.isFinite(quantidade)) {
+                mensagem.textContent = "Informe uma quantidade válida.";
+                return;
+            }
+
+            if (quantidade > estoque) {
+                mensagem.textContent = "Oxigênio insuficiente.";
+                return;
+            }
+
+            estoque -= quantidade;
+            nivel.textContent = estoque;
+            mensagem.textContent = "Solicitação aprovada!";
+            campo.value = "";
+        });
+    </script>
+</body>
+</html>
